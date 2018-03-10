@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapper.xml映射文件中定义了操作数据库的sql，每个sql是一个statement，
+	 映射文件是mybatis的核心。 -->
+<!-- 
+	 namespace命名空间，作用就是对sql进行分类化管理，理解sql隔离 
+	  注意：使用mapper代理方法开发，namespace有特殊重要的作用，namespace等于mapper接口地址
+-->
+<mapper namespace="com.luowg.person.mapper.PersonMapper">
+	
+	<select id="findCount" parameterType="com.luowg.person.po.Person" resultType="long">
+		select count(*) from teacher 
+		<if test="loginname!= null and loginname!= ''">
+		    where loginname like '%${loginname}%'  
+		 </if>
+	</select>
+	<select id="findDataTables" resultType="com.luowg.person.po.Person" parameterType="hashmap">
+		select * from teacher 
+		<where>
+		<if test="person.loginname!= null and person.loginname!= ''">
+		     loginname like '%${person.loginname}%'  
+		 </if>
+		 <if test="person.name!= null and person.name!= ''">
+		     name like '%${person.name}%'  
+		 </if>
+		</where>
+	</select>
+	<select id="getById" resultType="com.luowg.person.po.Person" parameterType="string">
+		select * from teacher where id= #{value}
+	</select>
+	<select id="login" resultType="com.luowg.person.po.Person" parameterType="com.luowg.person.po.Person">
+		select * from teacher where loginname= #{loginname} and password= #{password}
+	</select>
+	<insert id="save" parameterType="com.luowg.person.po.Person">
+		insert into teacher values(
+		#{id},
+		#{name},
+		#{level},
+		#{loginname},
+		#{password},
+		#{userid},
+		#{sex},
+		#{phone},
+		#{email},
+		#{qq},
+		#{status},
+		#{dept})
+	</insert>
+	<update id="update" parameterType="com.luowg.person.po.Person">
+	update teacher
+	<set>
+	<if test="name!=null">name=#{name,jdbcType=VARCHAR},</if>
+	<if test="level!=null">level=#{level,jdbcType=VARCHAR},</if>
+	<if test="loginname!=null">loginname=#{loginname,jdbcType=VARCHAR},</if>
+	<if test="password!=null">password=#{password,jdbcType=VARCHAR},</if>
+	<if test="userid!=null">userid=#{userid,jdbcType=VARCHAR},</if>
+	<if test="sex!=null">sex=#{sex,jdbcType=VARCHAR},</if>
+	<if test="phone!=null">phone=#{phone,jdbcType=VARCHAR},</if>
+	<if test="email!=null">email=#{email,jdbcType=VARCHAR},</if>
+	<if test="qq!=null">qq=#{qq,jdbcType=VARCHAR},</if>
+	<if test="status!=null">status=#{status,jdbcType=VARCHAR},</if>
+	<if test="dept!=null">dept=#{dept,jdbcType=VARCHAR},</if>	
+	</set>
+	where id =#{id}
+	</update>
+	<delete id="delete" parameterType="String">
+		delete from teacher where id=#{id}
+	</delete>
+	<select id="selectNode" resultType="com.luowg.person.po.Text">
+	
+	select * from sort
+	</select>
+	
+</mapper>
+
+

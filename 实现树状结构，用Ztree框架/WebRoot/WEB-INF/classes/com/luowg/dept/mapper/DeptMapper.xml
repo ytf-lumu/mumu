@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapper.xml映射文件中定义了操作数据库的sql，每个sql是一个statement，
+	 映射文件是mybatis的核心。 -->
+<!-- 
+	 namespace命名空间，作用就是对sql进行分类化管理，理解sql隔离 
+	  注意：使用mapper代理方法开发，namespace有特殊重要的作用，namespace等于mapper接口地址
+-->
+<mapper namespace="com.luowg.dept.mapper.DeptMapper">
+	
+	<select id="findCount" parameterType="com.luowg.dept.po.Dept" resultType="long">
+		select count(*) from dept 
+		<if test="deptname!= null and deptname!= ''">
+		    where deptname like '%${deptname}%'  
+		 </if>
+	</select>
+	<select id="findDataTables" resultType="com.luowg.dept.po.Dept" parameterType="hashmap">
+		select * from dept 
+		<where>
+		 <if test="dept.deptname!= null and dept.deptname!= ''">
+		    deptname like '%${dept.deptname}%'  
+		 </if> 
+		 <if test="dept.phone!= null and dept.phone!= ''">
+		  and  phone like '%${dept.phone}%'  
+		 </if>
+		</where>
+	</select>
+	<select id="getById" resultType="com.luowg.dept.po.Dept" parameterType="string">
+		select * from dept where id= #{value}
+	</select>	
+	<insert id="save" parameterType="com.luowg.dept.po.Dept">
+		insert into dept values(
+		#{id},
+		#{deptname},
+		#{category},
+		#{head},		
+		#{phone})
+	</insert>
+	<update id="update" parameterType="com.luowg.dept.po.Dept" >
+	update dept
+	<set>
+	<if test="deptname!=null">deptname=#{deptname,jdbcType=VARCHAR},</if>
+	<if test="category!=null">category=#{category,jdbcType=VARCHAR},</if>
+	<if test="head!=null">head=#{head,jdbcType=VARCHAR},</if>
+	<if test="phone!=null">phone=#{phone,jdbcType=VARCHAR},</if>
+	</set>
+	where id=#{id}
+	</update>
+	<select id="selectNode" resultType="com.luowg.person.po.Text">
+	
+	select * from sort
+	</select>
+	
+</mapper>
+
+
