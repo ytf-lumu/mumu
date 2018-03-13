@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.luowg.brand.mapper.BrandMapper">
+    <select id="zgCount" parameterType="String"
+		resultType="long">
+		select count(*) from brand where region ='${value}'		
+	</select>
+	<select id="getCount" parameterType="com.luowg.brand.bo.Brand"
+		resultType="long">
+		select count(*) from brand
+		<where>
+			<if test="brandname!= null and brandname!= ''">
+				brandname like '%${brandname}%'
+			</if>
+			 <if test="region=='中国' and region!=null and region!=''">
+			  and region ='${region}'
+			</if>
+			<if test="region!='中国' and region!=null and region!=''">
+			  and region !='中国'
+			</if> 
+		</where>
+	</select>
+	<select id="getId" resultType="com.luowg.brand.bo.Brand"
+		parameterType="string">
+		select * from brand where id= #{value}
+	</select>
+	<select id="getDataTables" resultType="com.luowg.brand.bo.Brand"
+		parameterType="hashmap">
+		select * from brand
+		<where>
+			<if test="brand.brandname!= null and brand.brandname!= ''">
+				brandname like '%${brand.brandname}%'
+			</if>
+			 <if test="brand.region=='中国' and brand.region!=null and brand.region!=''">
+			  and region = '${brand.region}'
+			</if>
+			<if test="brand.region!='中国' and brand.region!=null and brand.region!='' ">
+			  and region != '中国'
+			</if> 
+		</where>
+		<!-- limit #{dataTablesInput.start},#{dataTablesInput.length} -->
+	</select>
+	<insert id="save" parameterType="com.luowg.brand.bo.Brand">
+		insert into brand values(
+		#{id},
+		#{brandname},
+		#{details},
+		#{region},
+		#{logo},
+		#{joinTime},
+		#{status},
+		#{sorting})
+	</insert>
+	<delete id="deleteBrand" parameterType="String">
+	delete from brand where id=#{id}
+	</delete>
+</mapper>

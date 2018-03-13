@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapper.xml映射文件中定义了操作数据库的sql，每个sql是一个statement， 映射文件是mybatis的核心。 -->
+<!-- namespace命名空间，作用就是对sql进行分类化管理，理解sql隔离 注意：使用mapper代理方法开发，namespace有特殊重要的作用，namespace等于mapper接口地址 -->
+<mapper namespace="com.luowg.product.mapper.ProductMapper">
+
+	<select id="findCount" parameterType="com.luowg.product.po.Product"
+		resultType="long">
+		select count(*) from product
+		<where>
+			<if test="productname!= null and productname!= ''">
+				productname like '%${productname}%'
+			</if>
+			<if test="startTime!= null and startTime!= ''">
+				and joinTime >= '${startTime}'
+			</if>
+			<if test="startTime!= null and startTime!= ''">
+				and '${endTime}' > joinTime
+			</if>
+			<if test="cateid!=null and cateid!=''">
+			   cateid = '${cateid}'
+			</if>
+		</where>
+	</select>
+	<select id="findDataTables" resultType="com.luowg.product.po.Product"
+		parameterType="hashmap">
+		select * from product
+		<where>
+			<if test="product.productname!= null and product.productname!= ''">
+				productname like '%${product.productname}%'
+			</if>
+			<if test="product.startTime!= null and product.startTime!= ''">
+				and joinTime >= '${product.startTime}'
+			</if>
+			<if test="product.startTime!= null and product.startTime!= ''">
+				and '${product.endTime}' > joinTime
+			</if>
+			<if test="product.cateid!=null and product.cateid!=''">
+			   cateid = '${product.cateid}'
+			</if>
+	      </where>
+		<!-- // limit #{dataTablesInput.start},#{dataTablesInput.length}  -->
+	</select>
+	<select id="getById" resultType="com.luowg.product.po.Product"
+		parameterType="string">
+		select * from product where id= #{value}
+	</select>
+
+	<insert id="save" parameterType="com.luowg.product.po.Product">
+		insert into product values(
+		#{id},
+		#{productname},
+		#{costprice},
+		#{nowprice},
+		#{region},
+		#{joinTime},
+		#{audit},		
+		#{status},
+		#{image},
+		#{brandname},
+		#{brief},
+		#{texture},
+		#{weight},
+		#{unit},
+		#{keyword},
+		#{content_z},
+		#{content_x})
+	</insert>
+	<update id="update" parameterType="com.luowg.product.po.Product">
+		update product
+		<set>
+			<if test="productname!=null">productname=#{productname,jdbcType=VARCHAR},</if>
+			<if test="costprice!=null ">costprice=#{costprice,jdbcType=VARCHAR},</if>
+			<if test="nowprice!=null ">nowprice=#{nowprice,jdbcType=VARCHAR},</if>
+			<if test="region!=null">region=#{region,jdbcType=VARCHAR},</if>
+			<if test="audit!=null ">audit=#{audit,jdbcType=VARCHAR},</if>
+			<if test="joinTime!=null">joinTime=#{joinTime,javaType=DATE, jdbcType=VARCHAR},</if>		
+			<if test="status!=null">status=#{status,jdbcType=VARCHAR},</if>
+		    <if test="image!=null">image=#{image,jdbcType=VARCHAR},</if>
+		    <if test="brandname!=null">brandname=#{brandname,jdbcType=VARCHAR},</if>
+		    <if test="brief!=null">brief=#{brief,jdbcType=VARCHAR},</if>
+		    <if test="texture!=null">texture=#{texture,jdbcType=VARCHAR},</if>
+		    <if test="weight!=null">weight=#{weight,jdbcType=VARCHAR},</if>
+		    <if test="unit!=null">unit=#{unit,jdbcType=VARCHAR},</if>
+		    <if test="keyword!=null">keyword=#{keyword,jdbcType=VARCHAR},</if>
+		    <if test="content_z!=null">content_z=#{content_z,jdbcType=VARCHAR},</if>
+		     <if test="content_x!=null">content_x=#{content_x,jdbcType=VARCHAR},</if>
+		</set>
+		where id=#{id,jdbcType=VARCHAR}
+	</update>
+	<delete id="delete" parameterType="string">
+		delete from product where id=#{id}
+	</delete>
+</mapper>
+
+

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Mapper.xml映射文件中定义了操作数据库的sql，每个sql是一个statement， 映射文件是mybatis的核心。 -->
+<!-- namespace命名空间，作用就是对sql进行分类化管理，理解sql隔离 注意：使用mapper代理方法开发，namespace有特殊重要的作用，namespace等于mapper接口地址 -->
+<mapper namespace="com.luowg.category.mapper.CategoryMapper">
+
+	<select id="findCount" parameterType="com.luowg.category.po.Category"
+		resultType="long">
+		select count(*) from category
+		<where>
+			<if test="categoryname!= null and categoryname!= ''">
+				categoryname like '%${categoryname}%'
+			</if>			
+		</where>
+	</select>	
+	<select id="findDataTables" resultType="com.luowg.category.po.Category"
+		parameterType="com.luowg.category.po.Category">
+		select * from category					
+	</select>
+	
+	<select id="getById" resultType="com.luowg.category.po.Category"
+		parameterType="string">
+		select * from category where id= #{value}
+	</select>
+
+	<insert id="save" parameterType="com.luowg.category.po.Category">
+		insert into category values(
+		#{id},
+		#{categoryname},
+		#{fater},
+		#{sort},
+		#{note})
+	</insert>
+	<update id="update" parameterType="com.luowg.category.po.Category">
+		update category
+		<set>
+			<if test="categoryname!=null"> categoryname=#{categoryname,jdbcType=VARCHAR},</if>
+			<if test="fater!=null ">fater=#{fater,jdbcType=VARCHAR},</if>
+			<if test="sort!=null ">sort=#{sort,jdbcType=VARCHAR},</if>
+			<if test="note!=null">note=#{note,jdbcType=VARCHAR},</if>									
+		</set>
+		where id=#{id,jdbcType=VARCHAR}
+	</update>
+	<delete id="delete" parameterType="string">
+		delete from category where id=#{id}
+	</delete>
+</mapper>
+
+
